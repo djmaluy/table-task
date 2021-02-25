@@ -1,23 +1,23 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { DataTable } from "./components/DataTable";
 import { Switcher } from "./components/Switcher";
 import { useServerData } from "./components/useServerData";
 import { ArrowDown } from "./components/ArrowDown";
 import { ArrowUp } from "./components/ArrowUp";
 import { DetailItem } from "./components/DetailItem";
+import { Paginate } from "./Pagination";
 
 export const App = () => {
   const [url, setUrl] = useState("");
   const [isButtonClicked, setIsButtonClicked] = useState(false);
-  const [{ contactData, isFetching, setContactData }] = useServerData({
-    url,
-    isButtonClicked,
-  });
   const [directionSort, setDirectionSort] = useState(true);
   const [fieldData, setFieldData] = useState("");
   const [detailRow, setDetailRow] = useState("");
   const [isRowClicked, setIsRowClicked] = useState(false);
+  const [{ contactData, isFetching, setContactData }] = useServerData({
+    url,
+    isButtonClicked,
+  });
 
   const handleClick = (field) => {
     const copyData = contactData.concat();
@@ -54,17 +54,17 @@ export const App = () => {
     setIsRowClicked(true);
     setDetailRow(row);
   };
+
   return (
     <div className="container">
       <Switcher buttonHandler={buttonHandler} />
-
       {isButtonClicked ? (
-        <DataTable
-          Arrows={Arrows}
-          isFetching={isFetching}
+        <Paginate
           contactData={contactData}
+          Arrows={Arrows}
           fieldSortData={fieldSortData}
           fieldData={fieldData}
+          isFetching={isFetching}
           onHandleClick={onHandleClick}
         />
       ) : null}
