@@ -13,7 +13,7 @@ export const Switcher = ({ buttonHandler }) => {
       </Button>{" "}
       <Button variant="success ml-2" onClick={() => buttonHandler(bigData)}>
         1000 rows
-      </Button>{" "}
+      </Button>
     </div>
   );
 };

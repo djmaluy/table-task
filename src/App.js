@@ -6,6 +6,7 @@ import { ArrowDown } from "./components/ArrowDown";
 import { ArrowUp } from "./components/ArrowUp";
 import { DetailItem } from "./components/DetailItem";
 import { Paginate } from "./Pagination";
+import { InputSearch } from "./components/InputSearch";
 
 export const App = () => {
   const [url, setUrl] = useState("");
@@ -14,11 +15,13 @@ export const App = () => {
   const [fieldData, setFieldData] = useState("");
   const [detailRow, setDetailRow] = useState("");
   const [isRowClicked, setIsRowClicked] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
   const [{ contactData, isFetching, setContactData }] = useServerData({
     url,
     isButtonClicked,
   });
 
+  // ******  Sorted  data   **********
   const handleClick = (field) => {
     const copyData = contactData.concat();
     let sortData;
@@ -44,6 +47,7 @@ export const App = () => {
     return directionSort ? <ArrowDown /> : <ArrowUp />;
   };
 
+  //  *********  Detail  description  clicked row *********
   const buttonHandler = (url) => {
     setUrl(url);
     setIsButtonClicked(true);
@@ -55,18 +59,49 @@ export const App = () => {
     setDetailRow(row);
   };
 
+  //  ******** SearchInput  ***********
+
+  const handleValueSearch = (e) => {
+    setSearchValue(e.target.value);
+  };
+  const onSearchClick = () => {
+    console.log(searchValue);
+    setSearchValue("");
+  };
+
+  const getFilteredData = () => {
+    if (!searchValue) {
+      return contactData;
+    }
+    contactData.filter((i) => {
+      return (
+        i["firstName"].toLowerCase().includes(searchValue.toLowerCase()) ||
+        i["lastName"].toLowerCase().includes(searchValue.toLowerCase()) ||
+        i["email"].toLowerCase().includes(searchValue.toLowerCase())
+      );
+    });
+  };
+  const filteredData = getFilteredData();
+
   return (
     <div className="container">
       <Switcher buttonHandler={buttonHandler} />
       {isButtonClicked ? (
-        <Paginate
-          contactData={contactData}
-          Arrows={Arrows}
-          fieldSortData={fieldSortData}
-          fieldData={fieldData}
-          isFetching={isFetching}
-          onHandleClick={onHandleClick}
-        />
+        <>
+          <InputSearch
+            handleValueSearch={handleValueSearch}
+            onSearchClick={onSearchClick}
+            searchValue={searchValue}
+          />
+          <Paginate
+            filteredData={filteredData}
+            Arrows={Arrows}
+            fieldSortData={fieldSortData}
+            fieldData={fieldData}
+            isFetching={isFetching}
+            onHandleClick={onHandleClick}
+          />
+        </>
       ) : null}
       {isRowClicked ? <DetailItem detailItem={detailRow} /> : null}
     </div>

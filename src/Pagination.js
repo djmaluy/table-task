@@ -6,7 +6,7 @@ import { TableHead } from "./components/TableHead";
 import "./styles.css";
 
 export const Paginate = ({
-  contactData,
+  filteredData,
   fieldSortData,
   fieldData,
   Arrows,
@@ -16,8 +16,8 @@ export const Paginate = ({
   const [currentPage, setCurrentPage] = useState(0);
   const PER_PAGE = 50;
   const offset = currentPage * PER_PAGE;
-  const currentPageData = contactData.slice(offset, offset + PER_PAGE);
-  const pageCount = Math.ceil(contactData.length / PER_PAGE);
+  const currentPageData = filteredData.slice(offset, offset + PER_PAGE);
+  const pageCount = Math.ceil(filteredData.length / PER_PAGE);
 
   function handlePageClick({ selected: selectedPage }) {
     setCurrentPage(selectedPage);
@@ -29,7 +29,7 @@ export const Paginate = ({
         <Loader />
       ) : (
         <>
-          <Table bordered hover className="mt-4">
+          <Table bordered hover className="mt-1">
             <TableHead
               fieldSortData={fieldSortData}
               fieldData={fieldData}
